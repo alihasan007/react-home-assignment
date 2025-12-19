@@ -1,5 +1,5 @@
 import { http, HttpResponse, HttpHandler } from "msw";
-import { type Epic, type Iteration } from "../../models/types";
+import { type Epic, type Iteration } from "../../types/epics";
 import { v4 as uuid } from "uuid";
 
 // Mock Data
@@ -171,7 +171,7 @@ export const handlers: HttpHandler[] = [
   http.get("/api/iterations", async () => {
     const iters: (Iteration & { epicId: string; epicName: string })[] =
       sampleEpics.flatMap((e) =>
-        (e.iterations ?? []).map((it) => ({
+        (e.iterations ?? []).map((it: Iteration) => ({
           ...it,
           epicId: e.id,
           epicName: e.name,

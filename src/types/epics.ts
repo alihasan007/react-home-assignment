@@ -1,7 +1,14 @@
 export type RiskLevel = "low" | "medium" | "high";
 
+export type Iteration = {
+  id: string;
+  name: string;
+  plannedPoints: number;
+  completedPoints: number;
+};
+
 export interface Epic {
-  iterations: never[];
+  iterations: Iteration[];
   id: string;
   name: string;
   description: string;
