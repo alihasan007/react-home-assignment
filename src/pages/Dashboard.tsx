@@ -25,7 +25,7 @@ export default function Dashboard() {
 
       return matchesSearch;
     });
-  }, [epics, debouncedSearch]);
+  }, [debouncedSearch]);
 
   const totalPlanned = filtered.reduce((sum, e) => sum + e.plannedPoints, 0);
   const totalCompleted = filtered.reduce(
@@ -140,7 +140,7 @@ export default function Dashboard() {
                   <strong>Team:</strong> {selectedEpic.teamName}
                 </div>
                 <div>
-                  <strong>Risk:</strong>{" "}
+                  <strong>Risk:</strong>
                   <span className="capitalize">{selectedEpic.riskLevel}</span>
                 </div>
               </div>

@@ -1,19 +1,11 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-export type Epic = {
-  id: string;
-  name: string;
-  description: string;
-  plannedPoints: number;
-  completedPoints: number;
-  owner: string;
-  riskLevel: "low" | "medium" | "high";
-  teamName: string;
-};
+import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
+import type { Epic } from "../../types/epics";
+import { fetchEpicsApi } from "../../api/epicsAPI";
 
 type EpicsState = {
   list: Epic[];
   selectedId: string | null;
+  loading: boolean;
 };
 
 const initialState: EpicsState = {
@@ -40,7 +32,16 @@ const initialState: EpicsState = {
     },
   ],
   selectedId: null,
+  loading: false,
 };
+
+export const fetchEpicById = createAsyncThunk(
+  "epics/fetchById",
+  async (id: string) => {
+    const list = await fetchEpicsApi();
+    return list.find((e) => e.id === id) ?? null;
+  }
+);
 
 const epicsSlice = createSlice({
   name: "epics",
@@ -49,6 +50,25 @@ const epicsSlice = createSlice({
     setSelectedEpic(state, action: PayloadAction<string | null>) {
       state.selectedId = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchEpicById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchEpicById.fulfilled, (state, action: PayloadAction<Epic | null>) => {
+        state.loading = false;
+        const epic = action.payload;
+        if (epic) {
+          const exists = state.list.some((e) => e.id === epic.id);
+          if (!exists) {
+            state.list.push(epic);
+          }
+        }
+      })
+      .addCase(fetchEpicById.rejected, (state) => {
+        state.loading = false;
+      });
   },
 });
 

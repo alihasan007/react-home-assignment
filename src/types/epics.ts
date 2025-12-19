@@ -1,6 +1,7 @@
 export type RiskLevel = "low" | "medium" | "high";
 
 export interface Epic {
+  iterations: never[];
   id: string;
   name: string;
   description: string;

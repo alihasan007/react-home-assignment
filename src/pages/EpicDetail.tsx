@@ -1,15 +1,13 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hook";
-import { selectEpicsState } from "../features/epics/epicsSelectors";
-import { fetchEpicById, setSelectedEpic } from "../features/epics/epicsSlice";
+import fetchEpicById, { setSelectedEpic } from "../features/epics/epicsSlice";
 import Drawer from "../components/ui/Drawer";
 import Loader from "../components/ui/Loader";
 
 export default function EpicDetail() {
   const dispatch = useAppDispatch();
-  const state = useAppSelector(selectEpicsState);
-  const selectedId = state.selectedId;
-
+  const state = useAppSelector((state) => state.epics);
+  const { selectedId } = useAppSelector((state) => state.epics);
   const isListReady = Array.isArray(state.list);
 
   // ✅ SAFE derivation
@@ -71,7 +69,7 @@ export default function EpicDetail() {
                 </tr>
               </thead>
               <tbody>
-                {(epic.iterations ?? []).map((it) => (
+                {epic.iterations.map((it: any) => (
                   <tr key={it.id} className="border-t">
                     <td className="p-2">{it.name}</td>
                     <td className="p-2">{it.plannedPoints}</td>

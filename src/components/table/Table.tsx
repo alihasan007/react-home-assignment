@@ -27,7 +27,6 @@ export default function Table<T>({ data, columns, onRowClick }: Props<T>) {
             ))}
           </tr>
         </thead>
-
         <tbody>
           {data.map((row, i) => (
             <tr
